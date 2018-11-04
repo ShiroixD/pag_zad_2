@@ -1,1 +1,1 @@
-# pag_zad_2
+# OpenGLPAG
