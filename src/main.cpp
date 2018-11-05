@@ -1,3 +1,5 @@
+//Fabian Frontczak 210179 FTIMS
+
 // dear imgui: standalone example application for GLFW + OpenGL 3, using programmable pipeline
 // If you are new to dear imgui, see examples/README.txt and documentation at the top of imgui.cpp.
 // (GLFW is a cross-platform general purpose library for handling windows, inputs, OpenGL/Vulkan graphics context creation, etc.)
@@ -47,8 +49,8 @@ const unsigned int SCR_HEIGHT = 900;
 std::vector<float> vertices = {};
 static int max_depth = 3;
 ImVec4 clear_color = ImVec4(0.5f, 0.5f, 0.5f, 1.0f);
-int radiusX = 0;
-int radiusY = 0;
+float radiusX = 0;
+float radiusY = 0;
 
 const char *vertexShaderSource ="#version 330 core\n"
                                 "layout (location = 0) in vec3 aPos;\n"
@@ -141,7 +143,7 @@ int main()
     //calculateBox(-0.5f, -0.5f, 0.0f, 0.4f);
     //sierpinskiCarpet(-1.0f, -1.0f, 0.0f, 2.0f, 0);
     //menger(-1,-1,0, 2, 0, max_depth);
-    menger(-1,-1,0, 2, max_depth);
+    menger(-0.8f,-0.8f, 0, 1.8f, max_depth);
 
     unsigned int VBO, VAO;
     glGenVertexArrays(1, &VAO);
@@ -222,23 +224,55 @@ int main()
         {
             bool isImGuiInit = true;
             static int localDepthLevel = max_depth;
-            static int localRadiusX = radiusX;
-            static int localRadiusY = radiusY;
+            static bool autoRotate = false;
+            static bool autoRotateX = false;
+            static bool autoRotateY = false;
+            static int localRadiusX = (int)radiusX;
+            static int localRadiusY = (int)radiusY;
 
             ImGui::Begin("Glebokosc rekurencji / kolor", &isImGuiInit, ImGuiWindowFlags_NoTitleBar);           // Create a window called "sth" and append into it.
             ImGui::SliderInt("Glebokosc", &localDepthLevel, 1, 5);            // Edit 1 int using a slider from 0 to 7
             ImGui::ColorEdit3("Kolor", (float*)&clear_color); // Edit 3 floats representing a color
-            ImGui::SliderInt("Obrot X", &localRadiusX, 0, 360);
-            ImGui::SliderInt("Obrot Y", &localRadiusY, 0, 360);
 
-            if (ImGui::Button("Zatwierdz"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+            if (ImGui::Button("Zatwierdz poziom i kolor"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
             {
                 vertices.clear();
                 max_depth = localDepthLevel;
-                menger(-1,-1,0, 2, max_depth);
-                radiusX = localRadiusX;
-                radiusY = localRadiusY;
+                menger(-0.8f,-0.8f, 0, 1.8f, max_depth);
+                radiusX = (float)localRadiusX;
+                radiusY = (float)localRadiusY;
                 fillVertexBuffer();
+            }
+            ImGui::NewLine();
+
+            ImGui::Checkbox("Auto obrót", &autoRotate);
+            if (autoRotate)
+            {
+                radiusX = glm::radians(0.0f);
+                radiusY = glm::radians(0.0f);
+
+                ImGui::SameLine();
+                ImGui::Checkbox("X", &autoRotateX);
+                ImGui::SameLine();
+                ImGui::Checkbox("Y", &autoRotateY);
+
+                if (autoRotate && autoRotateX)
+                {
+                    radiusX = (float)glfwGetTime();
+                }
+
+                if (autoRotate && autoRotateY)
+                {
+                    radiusY = (float)glfwGetTime();
+                }
+            }
+            else
+            {
+                ImGui::SliderInt("Obrot X", &localRadiusX, 0, 360);
+                ImGui::SliderInt("Obrot Y", &localRadiusY, 0, 360);
+
+                radiusX = glm::radians((float)localRadiusX);
+                radiusY = glm::radians((float)localRadiusY);
             }
 
             ImGui::End();
@@ -259,8 +293,8 @@ int main()
         glm::mat4 model = glm::mat4(1.0f);
         glm::mat4 view = glm::mat4(1.0f);
         //model = glm::rotate(model, glm::radians(30.0f), glm::vec3(0.2f, 0.3f, 0.0f));
-        model = glm::rotate(model, glm::radians((float)radiusX), glm::vec3(1.0f, 0.0f, 0.0f));
-        model = glm::rotate(model, glm::radians((float)radiusY), glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::rotate(model, radiusX, glm::vec3(1.0f, 0.0f, 0.0f));
+        model = glm::rotate(model, radiusY, glm::vec3(0.0f, 1.0f, 0.0f));
         view = glm::lookAt(glm::vec3(0.0f, 0.0f, -6.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         //model = glm::rotate(model, glm::radians((float)radiusX), glm::vec3(1.0f, 0.0f, 0.0f));
         //model = glm::rotate(model, glm::radians((float)radiusY), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -275,7 +309,7 @@ int main()
 
         // render the triangle
         glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, vertices.size() - (vertices.size()/4));
+        glDrawArrays(GL_TRIANGLES, 0, 3*vertices.size()/4);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         glfwSwapBuffers(window);
@@ -440,7 +474,7 @@ void calculateBox(float x, float y, float z, float width)
     vertices.push_back(clear_color.x);
     vertices.push_back(clear_color.y);
     vertices.push_back(clear_color.z);
-    vertices.push_back(1.0f);
+    vertices.push_back(0.5f);
     vertices.push_back(0.0f);
 
     vertices.push_back(x);
@@ -449,7 +483,7 @@ void calculateBox(float x, float y, float z, float width)
     vertices.push_back(clear_color.x);
     vertices.push_back(clear_color.y);
     vertices.push_back(clear_color.z);
-    vertices.push_back(0.5f);
+    vertices.push_back(0.0f);
     vertices.push_back(1.0f);
 
 //-----------------------------------------------
@@ -461,8 +495,8 @@ void calculateBox(float x, float y, float z, float width)
     vertices.push_back(clear_color.x);
     vertices.push_back(clear_color.y);
     vertices.push_back(clear_color.z);
-    vertices.push_back(0.0f);
-    vertices.push_back(0.0f);
+    vertices.push_back(0.5f);
+    vertices.push_back(1.0f);
 
     vertices.push_back(x + width);
     vertices.push_back(y + width);
@@ -471,7 +505,7 @@ void calculateBox(float x, float y, float z, float width)
     vertices.push_back(clear_color.y);
     vertices.push_back(clear_color.z);
     vertices.push_back(1.0f);
-    vertices.push_back(0.0f);
+    vertices.push_back(1.0f);
 
     vertices.push_back(x + width);
     vertices.push_back(y);
@@ -479,8 +513,8 @@ void calculateBox(float x, float y, float z, float width)
     vertices.push_back(clear_color.x);
     vertices.push_back(clear_color.y);
     vertices.push_back(clear_color.z);
-    vertices.push_back(0.5f);
     vertices.push_back(1.0f);
+    vertices.push_back(0.0f);
 
 //-----------------------------------------------
     // BACK
@@ -500,7 +534,7 @@ void calculateBox(float x, float y, float z, float width)
     vertices.push_back(clear_color.x);
     vertices.push_back(clear_color.y);
     vertices.push_back(clear_color.z);
-    vertices.push_back(1.0f);
+    vertices.push_back(0.5f);
     vertices.push_back(0.0f);
 
     vertices.push_back(x);
@@ -509,7 +543,7 @@ void calculateBox(float x, float y, float z, float width)
     vertices.push_back(clear_color.x);
     vertices.push_back(clear_color.y);
     vertices.push_back(clear_color.z);
-    vertices.push_back(0.5f);
+    vertices.push_back(0.0f);
     vertices.push_back(1.0f);
 
 //-----------------------------------------------
@@ -521,8 +555,8 @@ void calculateBox(float x, float y, float z, float width)
     vertices.push_back(clear_color.x);
     vertices.push_back(clear_color.y);
     vertices.push_back(clear_color.z);
-    vertices.push_back(0.0f);
-    vertices.push_back(0.0f);
+    vertices.push_back(0.5f);
+    vertices.push_back(1.0f);
 
     vertices.push_back(x + width);
     vertices.push_back(y + width);
@@ -531,7 +565,7 @@ void calculateBox(float x, float y, float z, float width)
     vertices.push_back(clear_color.y);
     vertices.push_back(clear_color.z);
     vertices.push_back(1.0f);
-    vertices.push_back(0.0f);
+    vertices.push_back(1.0f);
 
     vertices.push_back(x + width);
     vertices.push_back(y);
@@ -539,8 +573,8 @@ void calculateBox(float x, float y, float z, float width)
     vertices.push_back(clear_color.x);
     vertices.push_back(clear_color.y);
     vertices.push_back(clear_color.z);
-    vertices.push_back(0.5f);
     vertices.push_back(1.0f);
+    vertices.push_back(0.0f);
 
 //-----------------------------------------------
     // LEFT
@@ -560,7 +594,7 @@ void calculateBox(float x, float y, float z, float width)
     vertices.push_back(clear_color.x);
     vertices.push_back(clear_color.y);
     vertices.push_back(clear_color.z);
-    vertices.push_back(1.0f);
+    vertices.push_back(0.5f);
     vertices.push_back(0.0f);
 
     vertices.push_back(x);
@@ -569,7 +603,7 @@ void calculateBox(float x, float y, float z, float width)
     vertices.push_back(clear_color.x);
     vertices.push_back(clear_color.y);
     vertices.push_back(clear_color.z);
-    vertices.push_back(0.5f);
+    vertices.push_back(0.0f);
     vertices.push_back(1.0f);
 
 //-----------------------------------------------
@@ -581,8 +615,8 @@ void calculateBox(float x, float y, float z, float width)
     vertices.push_back(clear_color.x);
     vertices.push_back(clear_color.y);
     vertices.push_back(clear_color.z);
-    vertices.push_back(0.0f);
-    vertices.push_back(0.0f);
+    vertices.push_back(0.5f);
+    vertices.push_back(1.0f);
 
     vertices.push_back(x);
     vertices.push_back(y + width);
@@ -591,7 +625,7 @@ void calculateBox(float x, float y, float z, float width)
     vertices.push_back(clear_color.y);
     vertices.push_back(clear_color.z);
     vertices.push_back(1.0f);
-    vertices.push_back(0.0f);
+    vertices.push_back(1.0f);
 
     vertices.push_back(x);
     vertices.push_back(y);
@@ -599,8 +633,8 @@ void calculateBox(float x, float y, float z, float width)
     vertices.push_back(clear_color.x);
     vertices.push_back(clear_color.y);
     vertices.push_back(clear_color.z);
-    vertices.push_back(0.5f);
     vertices.push_back(1.0f);
+    vertices.push_back(0.0f);
 
 //-----------------------------------------------
     // RIGHT
@@ -620,7 +654,7 @@ void calculateBox(float x, float y, float z, float width)
     vertices.push_back(clear_color.x);
     vertices.push_back(clear_color.y);
     vertices.push_back(clear_color.z);
-    vertices.push_back(1.0f);
+    vertices.push_back(0.5f);
     vertices.push_back(0.0f);
 
     vertices.push_back(x + width);
@@ -629,7 +663,7 @@ void calculateBox(float x, float y, float z, float width)
     vertices.push_back(clear_color.x);
     vertices.push_back(clear_color.y);
     vertices.push_back(clear_color.z);
-    vertices.push_back(0.5f);
+    vertices.push_back(0.0f);
     vertices.push_back(1.0f);
 
 //-----------------------------------------------
@@ -641,8 +675,8 @@ void calculateBox(float x, float y, float z, float width)
     vertices.push_back(clear_color.x);
     vertices.push_back(clear_color.y);
     vertices.push_back(clear_color.z);
-    vertices.push_back(0.0f);
-    vertices.push_back(0.0f);
+    vertices.push_back(0.5f);
+    vertices.push_back(1.0f);
 
     vertices.push_back(x + width);
     vertices.push_back(y + width);
@@ -651,7 +685,7 @@ void calculateBox(float x, float y, float z, float width)
     vertices.push_back(clear_color.y);
     vertices.push_back(clear_color.z);
     vertices.push_back(1.0f);
-    vertices.push_back(0.0f);
+    vertices.push_back(1.0f);
 
     vertices.push_back(x + width);
     vertices.push_back(y);
@@ -659,8 +693,8 @@ void calculateBox(float x, float y, float z, float width)
     vertices.push_back(clear_color.x);
     vertices.push_back(clear_color.y);
     vertices.push_back(clear_color.z);
-    vertices.push_back(0.5f);
     vertices.push_back(1.0f);
+    vertices.push_back(0.0f);
 
 //-----------------------------------------------
     // BOTTOM
@@ -680,7 +714,7 @@ void calculateBox(float x, float y, float z, float width)
     vertices.push_back(clear_color.x);
     vertices.push_back(clear_color.y);
     vertices.push_back(clear_color.z);
-    vertices.push_back(1.0f);
+    vertices.push_back(0.5f);
     vertices.push_back(0.0f);
 
     vertices.push_back(x);
@@ -689,7 +723,7 @@ void calculateBox(float x, float y, float z, float width)
     vertices.push_back(clear_color.x);
     vertices.push_back(clear_color.y);
     vertices.push_back(clear_color.z);
-    vertices.push_back(0.5f);
+    vertices.push_back(0.0f);
     vertices.push_back(1.0f);
 
     //-----------------------------------------------
@@ -701,8 +735,8 @@ void calculateBox(float x, float y, float z, float width)
     vertices.push_back(clear_color.x);
     vertices.push_back(clear_color.y);
     vertices.push_back(clear_color.z);
-    vertices.push_back(0.0f);
-    vertices.push_back(0.0f);
+    vertices.push_back(0.5f);
+    vertices.push_back(1.0f);
 
     vertices.push_back(x + width);
     vertices.push_back(y);
@@ -711,7 +745,7 @@ void calculateBox(float x, float y, float z, float width)
     vertices.push_back(clear_color.y);
     vertices.push_back(clear_color.z);
     vertices.push_back(1.0f);
-    vertices.push_back(0.0f);
+    vertices.push_back(1.0f);
 
     vertices.push_back(x + width);
     vertices.push_back(y);
@@ -719,8 +753,8 @@ void calculateBox(float x, float y, float z, float width)
     vertices.push_back(clear_color.x);
     vertices.push_back(clear_color.y);
     vertices.push_back(clear_color.z);
-    vertices.push_back(0.5f);
     vertices.push_back(1.0f);
+    vertices.push_back(0.0f);
 
     //-----------------------------------------------
     // TOP
@@ -740,7 +774,7 @@ void calculateBox(float x, float y, float z, float width)
     vertices.push_back(clear_color.x);
     vertices.push_back(clear_color.y);
     vertices.push_back(clear_color.z);
-    vertices.push_back(1.0f);
+    vertices.push_back(0.5f);
     vertices.push_back(0.0f);
 
     vertices.push_back(x);
@@ -749,7 +783,7 @@ void calculateBox(float x, float y, float z, float width)
     vertices.push_back(clear_color.x);
     vertices.push_back(clear_color.y);
     vertices.push_back(clear_color.z);
-    vertices.push_back(0.5f);
+    vertices.push_back(0.0f);
     vertices.push_back(1.0f);
 
     //-----------------------------------------------
@@ -761,8 +795,8 @@ void calculateBox(float x, float y, float z, float width)
     vertices.push_back(clear_color.x);
     vertices.push_back(clear_color.y);
     vertices.push_back(clear_color.z);
-    vertices.push_back(0.0f);
-    vertices.push_back(0.0f);
+    vertices.push_back(0.5f);
+    vertices.push_back(1.0f);
 
     vertices.push_back(x + width);
     vertices.push_back(y + width);
@@ -771,7 +805,7 @@ void calculateBox(float x, float y, float z, float width)
     vertices.push_back(clear_color.y);
     vertices.push_back(clear_color.z);
     vertices.push_back(1.0f);
-    vertices.push_back(0.0f);
+    vertices.push_back(1.0f);
 
     vertices.push_back(x + width);
     vertices.push_back(y + width);
@@ -779,8 +813,8 @@ void calculateBox(float x, float y, float z, float width)
     vertices.push_back(clear_color.x);
     vertices.push_back(clear_color.y);
     vertices.push_back(clear_color.z);
-    vertices.push_back(0.5f);
     vertices.push_back(1.0f);
+    vertices.push_back(0.0f);
 }
 
 void menger(float xpos, float ypos, float zpos, float width, int depth)

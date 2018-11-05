@@ -2,16 +2,16 @@
 <project version="4">
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true" buildAllGenerated="true">
     <generated>
-      <config projectName="OpenGLPAG" targetName="glfw" />
-      <config projectName="OpenGLPAG" targetName="glad" />
-      <config projectName="OpenGLPAG" targetName="imgui" />
-      <config projectName="OpenGLPAG" targetName="uninstall" />
-      <config projectName="OpenGLPAG" targetName="OpenGLPAG" />
-      <config projectName="OpenGLPAG" targetName="assimp" />
-      <config projectName="OpenGLPAG" targetName="zlibstatic" />
-      <config projectName="OpenGLPAG" targetName="IrrXML" />
-      <config projectName="OpenGLPAG" targetName="stb_image" />
       <config projectName="OpenGLPAG" targetName="zlib" />
+      <config projectName="OpenGLPAG" targetName="OpenGLPAG" />
+      <config projectName="OpenGLPAG" targetName="glfw" />
+      <config projectName="OpenGLPAG" targetName="imgui" />
+      <config projectName="OpenGLPAG" targetName="zlibstatic" />
+      <config projectName="OpenGLPAG" targetName="glad" />
+      <config projectName="OpenGLPAG" targetName="uninstall" />
+      <config projectName="OpenGLPAG" targetName="stb_image" />
+      <config projectName="OpenGLPAG" targetName="IrrXML" />
+      <config projectName="OpenGLPAG" targetName="assimp" />
     </generated>
   </component>
   <component name="CMakeSettings">
@@ -86,23 +86,23 @@
     <session id="-1585616447">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="5" />
+          <entry key="project.closed" value="6" />
           <entry key="project.open.time.0" value="1" />
-          <entry key="project.open.time.24" value="1" />
+          <entry key="project.open.time.24" value="2" />
           <entry key="project.open.time.29" value="1" />
           <entry key="project.open.time.3" value="1" />
           <entry key="project.open.time.8" value="1" />
-          <entry key="project.opened" value="5" />
+          <entry key="project.opened" value="6" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="cpp" value="1825" />
+          <entry key="cpp" value="2191" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="ObjectiveC" value="1825" />
+          <entry key="ObjectiveC" value="2191" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -127,8 +127,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="50">
-              <caret line="263" column="35" selection-start-line="263" selection-start-column="35" selection-end-line="263" selection-end-column="35" />
+            <state>
+              <caret column="31" lean-forward="true" selection-start-column="31" selection-end-column="31" />
               <folding>
                 <element signature="e#326#344#0" expanded="true" />
                 <element signature="e#868#921#0" expanded="true" />
@@ -136,15 +136,6 @@
                 <element signature="e#1128#1168#0" expanded="true" />
                 <element signature="e#1177#1199#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/thirdparty/glm/glm/ext/matrix_transform.inl">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="9" column="48" selection-start-line="9" selection-start-column="39" selection-end-line="9" selection-end-column="48" />
             </state>
           </provider>
         </entry>
@@ -183,8 +174,7 @@
   </component>
   <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="105" />
-    <option name="y" value="30" />
+    <option name="x" value="7" />
     <option name="width" value="1750" />
     <option name="height" value="970" />
   </component>
@@ -229,7 +219,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -345,16 +335,18 @@
       <workItem from="1541275384018" duration="11703000" />
       <workItem from="1541334940729" duration="19260000" />
       <workItem from="1541358714040" duration="100000" />
+      <workItem from="1541424399043" duration="4019000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="89863000" />
+    <option name="totallyTimeSpent" value="93882000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.11208054" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.11342282" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -366,10 +358,10 @@
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Terminal" order="8" />
-      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.51073825" side_tool="true" visible="true" weight="0.3134752" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5114094" side_tool="true" weight="0.22836879" />
       <window_info anchor="bottom" id="Version Control" order="10" show_stripe_button="false" />
-      <window_info anchor="bottom" id="CMake" order="11" sideWeight="0.49463087" weight="0.26666668" />
-      <window_info anchor="bottom" id="Messages" order="12" sideWeight="0.4899329" weight="0.22836879" />
+      <window_info anchor="bottom" id="CMake" order="11" sideWeight="0.490604" weight="0.26666668" />
+      <window_info anchor="bottom" id="Messages" order="12" sideWeight="0.4885906" weight="0.22836879" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -430,8 +422,8 @@
     <entry file="file://$PROJECT_DIR$/res/textures/steel.jpg" />
     <entry file="file://$PROJECT_DIR$/src/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="50">
-          <caret line="263" column="35" selection-start-line="263" selection-start-column="35" selection-end-line="263" selection-end-column="35" />
+        <state>
+          <caret column="31" lean-forward="true" selection-start-column="31" selection-end-column="31" />
           <folding>
             <element signature="e#326#344#0" expanded="true" />
             <element signature="e#868#921#0" expanded="true" />
